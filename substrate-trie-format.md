@@ -74,24 +74,24 @@ Annotated output:
 TODO: sort out the tabs rendering – github insists on rendering as 8
 ```
 [
-	0b0100_0000,				// BRANCH
-								// <–– TODO: why is there no length here?
-	0x00, 						// slot 0
-	0x0b, 0x00, 0x00, 0x00, 	// 11 – length in bytes of the following node
-	0b1011_0000 + 3, 			// slot 1 LEAF; 176 + 3, i.e. the first of the remaining key nibbles (3'1'4')
-		0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
-		0x14,					// key
-		0x01, 0x00, 0x00, 0x00, // value length: 1 byte
-		0xff,					// value
-	0x00, 0x00, 				// slots 2,3
-	0x0b, 0x00, 0x00, 0x00, 	// 11 – length in bytes of the following node
-	0b1011_0000 + 8, 			// slot 4 LEAF; remaining nibbles: 8'1'9'; odd, so 8 goes into lower nibble
-		0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
-		0x19,					// key
-		0x01, 0x00, 0x00, 0x00, // value length: 1 byte
-		0xfe,					// value
+	0b0100_0000,			// BRANCH
+							// <–– TODO: why is there no length here?
+	0x00, 					// slot 0
+	0x0b, 0x00, 0x00, 0x00, // 11 – length in bytes of the following node
+	0b1011_0000 + 3, 		// slot 1 LEAF; 176 + 3, i.e. the first of the remaining key nibbles (3'1'4')
+	0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
+	0x14,					// key
+	0x01, 0x00, 0x00, 0x00, // value length: 1 byte
+	0xff,					// value
+	0x00, 0x00, 			// slots 2,3
+	0x0b, 0x00, 0x00, 0x00, // 11 – length in bytes of the following node
+	0b1011_0000 + 8, 		// slot 4 LEAF; remaining nibbles: 8'1'9'; odd, so 8 goes into lower nibble
+	0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
+	0x19,					// key
+	0x01, 0x00, 0x00, 0x00, // value length: 1 byte
+	0xfe,					// value
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // slots 5..15
-	0x00, 						// slot 16,
+	0x00, 					// slot 16,
 ]
 ```
 
