@@ -9,7 +9,16 @@ Tries in substrate are encoded as follows:
 - Branch
 
 The first byte of the sequence of bytes describing a node is encoded with a modified version of the ethereum Hex Prefix Notation, using the two highest bits to encode whether the node is one of Empty, Branch or Extension/Leaf node. These bits are not used in ethereum HPN. The lower two bits of the high nibble work exactly the same as in ethereum HPN: the lowest encodes oddness, the second lowest whether it's a Leaf or Extension node (sometimes referred to as the "termination" flag).
-`0b00_00_0000` => empty node
+
+
+| First byte    | Node type      | Comment |
+|---------------|----------------|----------|
+| `0b0000_0000` | Empty node     |
+| `0b0100_0000` | Branch node    | 
+| `0b1010_0000` | Leaf node      | Even number of nibbles follow |
+| `0b1011_xxxx` | Leaf node      | Odd number of nibbles. `xxxx` is the first nibble of the payload, and with the next 7 nibbles, encodes the length (l) in bytes of the key part of the payload (the value follows) |
+| `0b1000_0000` | Extension node | Even number of nibbles follow |
+| `0b1001_xxxx` | Extension node | Odd number of nibbles follow; `xxxx` is the first nibble of the payload |
 
 
 
