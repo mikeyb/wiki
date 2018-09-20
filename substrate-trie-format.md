@@ -21,8 +21,78 @@ The first byte of the sequence of bytes describing a node is encoded with a modi
 | `0b1000_0000` | Extension node | Even number of nibbles follow |
 | `0b1001_xxxx` | Extension node | Odd number of nibbles follow; `xxxx` is the first nibble of the payload |
 
+The payloads are encoded using [`parity codec`](https://github.com/paritytech/parity-codec). A sequence of bytes is encoded as itself and prepended with the payload length as 4 bytes forming an unsigned 32-bit int.
 
 ## Examples
+Note that the input items are sorted and deduplicated before the trie processing proper starts.
+
+### No input
+
+Input: `[]`
+Output: `0x00`
+
+### Single tuple, 1 byte key, 1 byte value
+
+Input: `([0xaa], [0xbb])`
+Annotated output:
+
+```
+trie: [
+    0xa0,	// 0b1010_0000 => Leaf node with even length payload
+    0x1,	// Key length: 1 byte
+    0x0,
+    0x0,
+    0x0,
+    0xaa,	// Key
+    0x1,	// Value length: 1 byte	
+    0x0,
+    0x0,
+    0x0,
+    0xbb	// Value
+]
+```
+
+### Two tuples with disjoint keys
+
+Input: `([0x48, 0x19], [0xfe]), ([0x13, 0x14], [0xff])`
+
+Expected trie structure spelled out for humans:
+
+```
+Branch
+	0: Empty node
+	1: Leaf ([0x03, 0x14], [0xff])
+	2: Empty node
+	3: Empty node
+	4: Leaf ([0x08, 0x19], [0xfe])
+	5: Empty node
+	…
+	f: Empty node
+```
+
+Annotated output:
+```
+[
+	0b0100_0000,				// BRANCH
+								// <–– TODO: why is there no length here?
+	0x00, 						// slot 0
+	0x0b, 0x00, 0x00, 0x00, 	// 11 – length in bytes of the following node
+	0b1011_0000 + 3, 			// slot 1 LEAF; 176 + 3, i.e. the first of the remaining key nibbles (3'1'4')
+		0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
+		0x14,					// key
+		0x01, 0x00, 0x00, 0x00, // value length: 1 byte
+		0xff,					// value
+	0x00, 0x00, 				// slots 2,3
+	0x0b, 0x00, 0x00, 0x00, 	// 11 – length in bytes of the following node
+	0b1011_0000 + 8, 			// slot 4 LEAF; remaining nibbles: 8'1'9'; odd, so 8 goes into lower nibble
+		0x01, 0x00, 0x00, 0x00, // key length: 1 bytes
+		0x19,					// key
+		0x01, 0x00, 0x00, 0x00, // value length: 1 byte
+		0xfe,					// value
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // slots 5..15
+	0x00, 						// slot 16,
+]
+```
 
 ### Complex example
 
@@ -36,7 +106,7 @@ Input is a set of key/value tuples:
 
 ```
 
-This is the expected trie structure spelled out for humans:
+Expected trie structure spelled out for humans:
 
 ```
 Extension, partial key: 0xa7
