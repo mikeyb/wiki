@@ -2,13 +2,14 @@
 # Substrate trie binary format
 
 Tries in substrate are encoded as follows:
+
 4 node types:
 - Empty
 - Extension
 - Leaf
 - Branch
 
-The first byte of the sequence of bytes describing a node is encoded with a modified version of the ethereum Hex Prefix Notation, using the two highest bits to encode whether the node is one of Empty, Branch or Extension/Leaf node. These bits are not used in ethereum HPN. The lower two bits of the high nibble work exactly the same as in ethereum HPN: the lowest encodes oddness, the second lowest whether it's a Leaf or Extension node (sometimes referred to as the "termination" flag).
+The first byte of the sequence of bytes describing a node is encoded with a modified version of the ethereum Hex Prefix Notation, using the two highest bits to encode whether the node is one of Empty, Branch or Extension/Leaf node. These bits are not used in ethereum HPN. The lower two bits of the high nibble work exactly the same as in ethereum HPN: the lowest encodes oddness, the second lowest whether it's a Leaf or Extension node (sometimes referred to as the "termination" flag). The remaining two high bits of the high nibble are `00` for an Empty node, `01` for a Branch node and `10` for a Leaf or Extension node. To distinguish a Leaf node from an Extension node the second lowest bit is used, exactly like in ethereum HPN.
 
 
 | First byte    | Node type      | Comment |
@@ -21,20 +22,45 @@ The first byte of the sequence of bytes describing a node is encoded with a modi
 | `0b1001_xxxx` | Extension node | Odd number of nibbles follow; `xxxx` is the first nibble of the payload |
 
 
+## Examples
 
-Expected trie:
+### Complex example
+
+Input is a set of key/value tuples:
 
 ```
-Extension, 0xa7
+([0xa7, 0x11, 0x35, 0x5], [0x2d]),
+([0xa7, 0x7d, 0x33, 0x7], [0x01]),
+([0xa7, 0xf9, 0x36, 0x5], [0x0b]),
+([0xa7, 0x7d, 0x39, 0x7], [0x0c]),
+
+```
+
+The is the expected trie structure spelled out for humans:
+
+```
+Extension, partial key: 0xa7
 	Branch
+		0: Empty node
 		1: Leaf ([0x01, 0x35, 0x5], 45)
-		7: Extension, d3
+		2: Empty node
+		…
+		7: Extension, partial key d3
 			Branch
-				3: Leaf ([0x03, 0x07], 1)
-				9: Leaf ([0x09, 0x07], 12)
-		f: Leaf ([0x09, 0x36, 0x5], 11)
+				0: Empty node
+				1: Empty node
+				2: Empty node
+				3: Leaf ([0x03, 0x07], 0x01)
+				…
+				9: Leaf ([0x09, 0x07], 0x0c)
+				…
+				16: Empty node
+		f: Leaf ([0x09, 0x36, 0x5], 0x0b)
 ```
 
+Below is the expected binary encoding of the above.
+
+**Note**: when building the trie the branches that are longer than the hashers length (32 bytes) are replaced with the hash of the content. In the bytes sequence showed below this has been disabled to show the full output of the trie construction.
 ```
 let codec_trie = [
     0x80,	// 0b10000000 => extension
