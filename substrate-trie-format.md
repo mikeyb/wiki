@@ -71,6 +71,7 @@ Branch
 ```
 
 Annotated output:
+
 TODO: sort out the tabs rendering – github insists on rendering as 8
 ```
 [
