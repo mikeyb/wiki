@@ -21,7 +21,7 @@ The first byte of the sequence of bytes describing a node is encoded with a modi
 | `0b1000_0000` | Extension node | Even number of nibbles follow |
 | `0b1001_xxxx` | Extension node | Odd number of nibbles follow; `xxxx` is the first nibble of the payload |
 
-The payloads are encoded using [`parity codec`](https://github.com/paritytech/parity-codec). A sequence of bytes is encoded as itself and prepended with the payload length as 4 bytes forming an unsigned 32-bit int.
+The payloads are encoded using [`parity codec`](https://github.com/paritytech/parity-codec). A sequence of bytes is encoded as itself and prepended with the payload length as 4 bytes forming an unsigned 32-bit int. Booleans are encoded as one byte with values `0` or `1`; vectors are prepended with an unsigned 32-bit int indicating the number of items in the vector.
 
 ## Examples
 Note that the input items are sorted and deduplicated before the trie processing proper starts.
