@@ -36,7 +36,7 @@ Input is a set of key/value tuples:
 
 ```
 
-The is the expected trie structure spelled out for humans:
+This is the expected trie structure spelled out for humans:
 
 ```
 Extension, partial key: 0xa7
