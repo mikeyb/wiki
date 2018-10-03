@@ -54,7 +54,6 @@ then it should look something like:
 - [trace_call](#trace_call)
 - [trace_rawTransaction](#trace_rawtransaction)
 - [trace_replayTransaction](#trace_replaytransaction)
-- [trace_replayBlockTransactions](#trace_replayblocktransactions)
 
 #### Transaction-Trace Filtering
 - [trace_block](#trace_block)
@@ -140,7 +139,7 @@ params: [
 
 Request
 ```bash
-curl --data '{"method":"trace_rawTransaction","params":["0xf86a8086d55698372431831e848094f0109fc8df283027b6285cc889f5aa624eac1f55843b9aca008025a009ebb6ca057a0535d6186462bc0b465b561c94a295bdb0621fc19208ab149a9ca0440ffd775ce91a833ab410777204d5341a6f9fa91216a6f3ee2c051fea6a0428",["trace"]],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"trace_rawTransaction","params":["0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",["trace"]],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -152,14 +151,7 @@ Response
     "output": "0x",
     "stateDiff": null,
     "trace": [{
-      "action": {
-        "callType": "call",
-        "from": "0x2c7536e3605d9c16a7a3d7b1898e529396a65c23",
-        "gas": "0x1e3278",
-        "input": "0x",
-        "to": "0xf0109fc8df283027b6285cc889f5aa624eac1f55",
-        "value": "0x3b9aca00"
-      },
+      "action": { ... },
       "result": {
         "gasUsed": "0x0",
         "output": "0x"
@@ -169,7 +161,7 @@ Response
       "type": "call"
     }],
     "vmTrace": null
-  }, "id": 1
+  }
 }
 ```
 
@@ -222,61 +214,6 @@ Response
     }],
     "vmTrace": null
   }
-}
-```
-
-***
-
-### trace_replayBlockTransactions
-
-Replays all transactions in a block returning the requested traces for each transaction.
-
-#### Parameters
-
-0. `Quantity` or `Tag` - Integer of a block number, or the string `'earliest'`, `'latest'` or `'pending'`.
-0. `Array` - Type of trace, one or more of: `"vmTrace"`, `"trace"`, `"stateDiff"`.
-
-```js
-params: [
-  "0x2ed119",
-  ["trace"]
-]
-```
-
-#### Returns
-
-- `Array` - Block transactions traces.
-
-#### Example
-
-Request
-```bash
-curl --data '{"method":"trace_replayBlockTransactions","params":["0x2ed119",["trace"]],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
-```
-
-Response
-```js
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "result": [
-    {
-      "output": "0x",
-      "stateDiff": null,
-      "trace": [{
-        "action": { ... },
-        "result": {
-          "gasUsed": "0x0",
-          "output": "0x"
-        },
-        "subtraces": 0,
-        "traceAddress": [],
-        "type": "call"
-      }],
-      "vmTrace": null
-    },
-    ...
-  ]
 }
 ```
 
@@ -352,8 +289,8 @@ Returns traces matching given filter
     - `toBlock`: `Quantity` or `Tag` - (optional) To this block.
     - `fromAddress`: `Array` - (optional) Sent from these addresses.
     - `toAddress`: `Address` - (optional) Sent to these addresses.
-    - `after`: `Quantity` - (optional) The offset trace number.
-    - `count`: `Quantity` - (optional) Integer number of traces to display in a batch.    
+    - `after`: `Quantity` - (optional) The offset trace number
+    - `count`: `Quantity` - (optional) Integer number of traces to display in a batch.
 
 ```js
 params: [{
@@ -373,7 +310,7 @@ params: [{
 
 Request
 ```bash
-curl --data '{"method":"trace_filter","params":[{"fromBlock":"0x2ed0c4","toBlock":"0x2ed128","toAddress":["0x8bbB73BCB5d553B5A556358d27625323Fd781D37"]}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"trace_filter","params":[{"fromBlock":"0x2ed0c4","toBlock":"0x2ed128","toAddress":["0x8bbB73BCB5d553B5A556358d27625323Fd781D37"],"after":1000,"count":100}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -526,3 +463,4 @@ Response
   ]
 }
 ```
+
