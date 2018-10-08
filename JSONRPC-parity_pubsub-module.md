@@ -15,7 +15,7 @@ title: The `parity_pubsub` Module
 Starts a subscription (on WebSockets / IPC / TCP transports) to results of calling some other RPC method.
 For every change in returned value of that RPC call a JSON-RPC notification with result and subscription ID will be sent to a client.
 
-An example notification received by subscribing to `eth_accounts` RPC method:
+An example notification received by subscribing to `eth_getBalance` RPC method:
 ```
 {"jsonrpc":"2.0","method":"parity_subscription","params":{"subscription":"0x416d77337e24399d","result":["0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826"]}}
 ```
@@ -47,7 +47,8 @@ params: [
 
 Request
 ```bash
-curl --data '{"method":"parity_subscribe","params":["eth_getBalance",["0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826","latest"]],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+wscat -c localhost:8546
+>{"method":"parity_subscribe","params":["eth_getBalance",["0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826","latest"]],"id":1,"jsonrpc":"2.0"}
 ```
 
 Response
