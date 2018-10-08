@@ -7,6 +7,7 @@ title: The `personal` Module
 - [personal_listAccounts](#personal_listaccounts)
 - [personal_newAccount](#personal_newaccount)
 - [personal_sendTransaction](#personal_sendtransaction)
+- [personal_sign](#personal_sign)
 - [personal_signTransaction](#personal_signtransaction)
 - [personal_unlockAccount](#personal_unlockaccount)
 
@@ -112,7 +113,7 @@ params: [
 
 #### Returns
 
-- `Object` - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
+- `Data` - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
 
 #### Example
 
@@ -127,6 +128,46 @@ Response
   "id": 1,
   "jsonrpc": "2.0",
   "result": "0x62e05075829655752e146a129a044ad72e95ce33e48ff48118b697e15e7b41e4"
+}
+```
+
+***
+
+### personal_sign
+
+Calculates an Ethereum specific signature with: `sign(keccak256("Ethereum Signed Message: " + len(message) + message)))`.
+
+#### Parameters
+
+0. `Data` - The transaction object
+0. `Address` - 20 Bytes - The address of the account to sign with
+0. `String` - Passphrase to unlock the `from` account.
+
+```js
+params: [
+  "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
+  "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+  "hunter"
+]
+```
+
+#### Returns
+
+- `Data` - Signed data.
+
+#### Example
+
+Request
+```bash
+curl --data '{"method":"personal_sign","params":["0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675","0xb60e8dd61c5d32be8058bb8eb970870f07233155","hunter"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+Response
+```js
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": "0xe7225f986f192f859a9bf84e34b2b7001dfa11aeb5c7164f81a2bee0d79943e2587be1faa11502eba0f803bb0ee071a082b6fe40fba025f3309263a1eef52c711c"
 }
 ```
 
@@ -164,8 +205,8 @@ params: [
 #### Returns
 
 - `Object` - Signed transaction and its details:
-    - `raw`: `Data` - The signed, RLP encoded transaction
-    - `tx`: `Object` - The signed, RLP encoded transaction.
+    - `raw`: `Data` - The signed, RLP encoded transaction.
+    - `tx`: `Object` - Transaction object.
 
 #### Example
 
