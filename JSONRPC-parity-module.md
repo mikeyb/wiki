@@ -4,6 +4,7 @@ title: The `parity` Module
 
 ## JSON-RPC methods
 
+- [parity_allTransactions](#parity_alltransactions)
 - [parity_cidV0](#parity_cidv0)
 - [parity_composeTransaction](#parity_composetransaction)
 - [parity_consensusCapability](#parity_consensuscapability)
@@ -70,7 +71,6 @@ title: The `parity` Module
 - [parity_unsignedTransactionsCount](#parity_unsignedtransactionscount)
 
 #### Node Settings
-- [parity_dappsUrl](#parity_dappsurl)
 - [parity_enode](#parity_enode)
 - [parity_mode](#parity_mode)
 - [parity_nodeKind](#parity_nodekind)
@@ -78,6 +78,80 @@ title: The `parity` Module
 - [parity_wsUrl](#parity_wsurl)
 
 ## JSON-RPC API Reference
+
+### parity_allTransactions
+
+Returns all the transactions from the transaction queue.
+
+#### Parameters
+
+None
+
+#### Returns
+
+- `Array` - Transaction list.
+    - `hash`: `Hash` - 32 Bytes - hash of the transaction.
+    - `nonce`: `Quantity` - The number of transactions made by the sender prior to this one.
+    - `blockHash`: `Hash` - 32 Bytes - hash of the block where this transaction was in. `null` when its pending.
+    - `blockNumber`: `Quantity` or `Tag` - Block number where this transaction was in. `null` when its pending.
+    - `transactionIndex`: `Quantity` - Integer of the transactions index position in the block. `null` when its pending.
+    - `from`: `Address` - 20 Bytes - address of the sender.
+    - `to`: `Address` - 20 Bytes - address of the receiver. `null` when its a contract creation transaction.
+    - `value`: `Quantity` - Value transferred in Wei.
+    - `gasPrice`: `Quantity` - Gas price provided by the sender in Wei.
+    - `gas`: `Quantity` - Gas provided by the sender.
+    - `input`: `Data` - The data send along with the transaction.
+    - `creates`: `Address` - (optional) Address of a created contract or `null`.
+    - `raw`: `Data` - Raw transaction data.
+    - `publicKey`: `Data` - Public key of the signer.
+    - `chainId`: `Quantity` - The chain id of the transaction, if any.
+    - `standardV`: `Quantity` - The standardized V field of the signature (0 or 1).
+    - `v`: `Quantity` - The V field of the signature.
+    - `r`: `Quantity` - The R field of the signature.
+    - `s`: `Quantity` - The S field of the signature.
+    - `condition`: `Object` - (optional) Conditional submission, Block number in `block` or timestamp in `time` or `null`.
+
+#### Example
+
+Request
+```bash
+curl --data '{"method":"parity_allTransactions","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+Response
+```js
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "blockHash": null,
+      "blockNumber": null,
+      "chainId": null,
+      "condition": null,
+      "creates": null,
+      "from": "0x5f3dffcf347944d3739b0805c934d86c8621997f",
+      "gas": "0x493e0",
+      "gasPrice": "0x12a05f200",
+      "hash": "0x045301a128ffcb4662dd199d1176bdf4cc9f0628e10d6bf120edfb52e3e39a78",
+      "input": "0x13f56f730...f3b4dc000",
+      "nonce": "0x577",
+      "publicKey": "0x3bb...9ce1b1",
+      "r": "0x6fd2c7a5dbb8795038ca258196083b3eabe15a20e3020c3f45e88f2e447be410",
+      "raw": "0xf88b8247d202...83eef3f8916bb818ce7",
+      "s": "0x5993992c547d20234aabfc8c32a58d25784255fef500383eef3f8916bb818ce7",
+      "standardV": "0x0",
+      "to": "0xe8b2d01ffa0a15736b2370b6e5064f9702c891b6",
+      "transactionIndex": null,
+      "v": "0x1b",
+      "value": "0x0"
+    },
+    { ... }, { ... }, ...
+  ]
+}
+```
+
+***
 
 ### parity_cidV0
 
@@ -276,7 +350,9 @@ Response
 
 ### parity_futureTransactions
 
-Returns all future transactions from transaction queue.
+**This method is deprecated in favor of [parity_allTransactions](#parity_allTransactions)** 
+
+ Returns all future transactions from transaction queue.
 
 #### Parameters
 
@@ -356,7 +432,7 @@ Get block header. Same as [`eth_getBlockByNumber`](JSONRPC-eth-module#eth_getblo
 
 #### Parameters
 
-0. `Quantity` or `Tag` - integer of a block number, or the string `'earliest'`, `'latest'` or `'pending'`, as in the [default block parameter](#the-default-block-parameter).
+0. `Quantity` or `Tag` - integer of a block number, or the string `'earliest'`, `'latest'` or `'pending'`, as in the default block parameter.
 
 ```js
 params: [
@@ -759,7 +835,7 @@ Response
 
 ### parity_changeVault
 
-Changes the current valut for the account
+Changes the current vault for the account
 
 #### Parameters
 
@@ -1268,29 +1344,29 @@ Response
 
 ### parity_postSign
 
-Request an arbitrary transaction to be signed by an account.
+Request a standard Ethereum message to be signed by an account.
 
 #### Parameters
 
 0. `Address` - Account address.
-0. `Hash` - Transaction hash.
+0. `Data` - The message
 
 ```js
 params: [
   "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-  "0x8cda01991ae267a539135736132f1f987e76868ce0269b7537d3aab37b7b185e"
+  "0x414243"
 ]
 ```
 
 #### Returns
 
-- `Quantity` - The id of the request to the signer. If the account was already unlocked, returns `Hash` of the transaction instead.
+- `Quantity` - The id of the request to the signer.
 
 #### Example
 
 Request
 ```bash
-curl --data '{"method":"parity_postSign","params":["0xb60e8dd61c5d32be8058bb8eb970870f07233155","0x8cda01991ae267a539135736132f1f987e76868ce0269b7537d3aab37b7b185e"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"parity_postSign","params":["0xb60e8dd61c5d32be8058bb8eb970870f07233155","0x414243"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -1330,7 +1406,7 @@ params: [{
   "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
   "condition": {
     "block": 354221,
-    "time": "2018-10-08T13:46:30.845Z"
+    "time": "2018-10-08T14:18:35.494Z"
   }
 }]
 ```
@@ -1343,7 +1419,7 @@ params: [{
 
 Request
 ```bash
-curl --data '{"method":"parity_postTransaction","params":[{"from":"0xb60e8dd61c5d32be8058bb8eb970870f07233155","to":"0xd46e8dd67c5d32be8058bb8eb970870f07244567","gas":"0x76c0","gasPrice":"0x9184e72a000","value":"0x9184e72a","data":"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675","condition":{"block":354221,"time":"2018-10-08T13:46:30.845Z"}}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"parity_postTransaction","params":[{"from":"0xb60e8dd61c5d32be8058bb8eb970870f07233155","to":"0xd46e8dd67c5d32be8058bb8eb970870f07244567","gas":"0x76c0","gasPrice":"0x9184e72a000","value":"0x9184e72a","data":"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675","condition":{"block":354221,"time":"2018-10-08T14:18:35.494Z"}}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -1635,7 +1711,7 @@ Response
 
 ### parity_chainId
 
-Returns the current chain ID used for tranaction signing.
+Returns the EIP155 chain ID used for transaction signing at the current best block. Null is returned if not available.
 
 #### Parameters
 
@@ -1643,7 +1719,7 @@ None
 
 #### Returns
 
-- `Quantity` - The current blockchain chain ID
+- `Quantity` - EIP155 Chain ID, or `null` if not available.
 
 #### Example
 
@@ -1786,7 +1862,7 @@ Response
 
 ### parity_netPeers
 
-Returns number of peers.
+Returns connected peers. Peers with non-empty protocols have completed handshake.
 
 #### Parameters
 
@@ -2175,36 +2251,6 @@ Response
   "id": 1,
   "jsonrpc": "2.0",
   "result": 0
-}
-```
-
-***
-
-### parity_dappsUrl
-
-Returns the hostname and the port of dapps/rpc server, error if not enabled.
-
-#### Parameters
-
-None
-
-#### Returns
-
-- `String` - The hostname and port number
-
-#### Example
-
-Request
-```bash
-curl --data '{"method":"parity_dappsUrl","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
-```
-
-Response
-```js
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "result": "localhost:8545"
 }
 ```
 
