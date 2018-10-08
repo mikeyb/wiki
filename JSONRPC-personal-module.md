@@ -165,13 +165,37 @@ params: [
 
 - `Object` - Signed transaction and its details:
     - `raw`: `Data` - The signed, RLP encoded transaction
-    - `tx`: `Object` - Track on which it was released, one of: `"stable"`, `"beta"`, `"nightly"`, `"testing"`, `"null"` (unknown or self-built).
+    - `tx`: `Object` - The signed, RLP encoded transaction.
 
 #### Example
 
 Request
 ```bash
 curl --data '{"method":"personal_signTransaction","params":[{"from":"0x407d73d8a49eeb85d32cf465507dd71d507100c1","to":"0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b","data":"0x41cd5add4fd13aedd64521e363ea279923575ff39718065d38bd46f0e6632e8e","value":"0x186a0"},"hunter2"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+Response
+```js
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": {
+    "raw": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
+    "tx": {
+      "hash": "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+      "nonce": "0x0",
+      "blockHash": "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+      "blockNumber": "0x15df",
+      "transactionIndex": "0x1",
+      "from": "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+      "to": "0x853f43d8a49eeb85d32cf465507dd71d507100c1",
+      "value": "0x7f110",
+      "gas": "0x7f110",
+      "gasPrice": "0x09184e72a000",
+      "input": "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360"
+    }
+  }
+}
 ```
 
 ***
