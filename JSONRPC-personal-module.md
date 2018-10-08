@@ -165,7 +165,7 @@ params: [
 
 - `Object` - Signed transaction and its details:
     - `raw`: `Data` - The signed, RLP encoded transaction
-    - `tx`: `undefined` - Track on which it was released, one of: `"stable"`, `"beta"`, `"nightly"`, `"testing"`, `"null"` (unknown or self-built).
+    - `tx`: `Object` - Track on which it was released, one of: `"stable"`, `"beta"`, `"nightly"`, `"testing"`, `"null"` (unknown or self-built).
 
 #### Example
 
