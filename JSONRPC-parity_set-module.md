@@ -157,7 +157,7 @@ Creates a hash of a file at a given URL.
 0. `String` - The url of the content.
 
 ```js
-params: ["https://raw.githubusercontent.com/paritytech/parity/master/README.md"]
+params: ["https://raw.githubusercontent.com/paritytech/parity-ethereum/master/README.md"]
 ```
 
 #### Returns
@@ -168,7 +168,7 @@ params: ["https://raw.githubusercontent.com/paritytech/parity/master/README.md"]
 
 Request
 ```bash
-curl --data '{"method":"parity_hashContent","params":["https://raw.githubusercontent.com/paritytech/parity/master/README.md"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"parity_hashContent","params":["https://raw.githubusercontent.com/paritytech/parity-ethereum/master/README.md"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -286,7 +286,7 @@ Response
 
 ### parity_setEngineSigner
 
-Sets an authority account for signing consensus messages. For more information check the [[Proof of Authority Chains]] page.
+Sets an authority account for signing consensus messages. For more information check the [Proof of Authority Chains](Proof-of-Authority-Chains.md) page.
 
 #### Parameters
 

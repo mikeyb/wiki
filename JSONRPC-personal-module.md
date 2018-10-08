@@ -7,6 +7,7 @@ title: The `personal` Module
 - [personal_listAccounts](#personal_listaccounts)
 - [personal_newAccount](#personal_newaccount)
 - [personal_sendTransaction](#personal_sendtransaction)
+- [personal_signTransaction](#personal_signtransaction)
 - [personal_unlockAccount](#personal_unlockaccount)
 
 ## JSON-RPC API Reference
@@ -111,7 +112,7 @@ params: [
 
 #### Returns
 
-- `Data` - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
+- `Object` - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
 
 #### Example
 
@@ -127,6 +128,50 @@ Response
   "jsonrpc": "2.0",
   "result": "0x62e05075829655752e146a129a044ad72e95ce33e48ff48118b697e15e7b41e4"
 }
+```
+
+***
+
+### personal_signTransaction
+
+Signs a transaction without dispatching it to the network. It can later be submitted using `eth_sendRawTransaction`. The account does not need to be unlocked to make this call, and will not be left unlocked after.
+
+#### Parameters
+
+0. `Object` - The transaction object
+    - `from`: `Address` - 20 Bytes - The address the transaction is send from.
+    - `to`: `Address` - (optional) 20 Bytes - The address the transaction is directed to.
+    - `gas`: `Quantity` - (optional) Integer of the gas provided for the transaction execution. eth_call consumes zero gas, but this parameter may be needed by some executions.
+    - `gasPrice`: `Quantity` - (optional) Integer of the gas price used for each paid gas.
+    - `value`: `Quantity` - (optional) Integer of the value sent with this transaction.
+    - `data`: `Data` - (optional) 4 byte hash of the method signature followed by encoded parameters. For details see [Ethereum Contract ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI).
+    - `nonce`: `Quantity` - (optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
+    - `condition`: `Object` - (optional) Conditional submission of the transaction. Can be either an integer block number `{ block: 1 }` or UTC timestamp (in seconds) `{ time: 1491290692 }` or `null`.
+0. `String` - Passphrase to unlock the `from` account.
+
+```js
+params: [
+  {
+    "from": "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+    "to": "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+    "data": "0x41cd5add4fd13aedd64521e363ea279923575ff39718065d38bd46f0e6632e8e",
+    "value": "0x186a0"
+  },
+  "hunter2"
+]
+```
+
+#### Returns
+
+- `Object` - Signed transaction and its details:
+    - `raw`: `Data` - The signed, RLP encoded transaction
+    - `tx`: `undefined` - Track on which it was released, one of: `"stable"`, `"beta"`, `"nightly"`, `"testing"`, `"null"` (unknown or self-built).
+
+#### Example
+
+Request
+```bash
+curl --data '{"method":"personal_signTransaction","params":[{"from":"0x407d73d8a49eeb85d32cf465507dd71d507100c1","to":"0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b","data":"0x41cd5add4fd13aedd64521e363ea279923575ff39718065d38bd46f0e6632e8e","value":"0x186a0"},"hunter2"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 ***
