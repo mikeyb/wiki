@@ -4,7 +4,6 @@ title: The `parity` Module
 
 ## JSON-RPC methods
 
-- [parity_chainId](#parity_chainid)
 - [parity_cidV0](#parity_cidv0)
 - [parity_composeTransaction](#parity_composetransaction)
 - [parity_consensusCapability](#parity_consensuscapability)
@@ -56,6 +55,7 @@ title: The `parity` Module
 
 #### Network Information
 - [parity_chain](#parity_chain)
+- [parity_chainId](#parity_chainid)
 - [parity_chainStatus](#parity_chainstatus)
 - [parity_gasPriceHistogram](#parity_gaspricehistogram)
 - [parity_netChain](#parity_netchain)
@@ -78,36 +78,6 @@ title: The `parity` Module
 - [parity_wsUrl](#parity_wsurl)
 
 ## JSON-RPC API Reference
-
-### parity_chainId
-
-Returns the current chain ID used for tranaction signing.
-
-#### Parameters
-
-None
-
-#### Returns
-
-- `Quantity` - The current blockchain chain ID
-
-#### Example
-
-Request
-```bash
-curl --data '{"method":"parity_chainId","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
-```
-
-Response
-```js
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "result": "0x1"
-}
-```
-
-***
 
 ### parity_cidV0
 
@@ -1360,7 +1330,7 @@ params: [{
   "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
   "condition": {
     "block": 354221,
-    "time": "2018-10-03T19:37:19.044Z"
+    "time": "2018-10-05T16:45:01.161Z"
   }
 }]
 ```
@@ -1373,7 +1343,7 @@ params: [{
 
 Request
 ```bash
-curl --data '{"method":"parity_postTransaction","params":[{"from":"0xb60e8dd61c5d32be8058bb8eb970870f07233155","to":"0xd46e8dd67c5d32be8058bb8eb970870f07244567","gas":"0x76c0","gasPrice":"0x9184e72a000","value":"0x9184e72a","data":"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675","condition":{"block":354221,"time":"2018-10-03T19:37:19.044Z"}}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"parity_postTransaction","params":[{"from":"0xb60e8dd61c5d32be8058bb8eb970870f07233155","to":"0xd46e8dd67c5d32be8058bb8eb970870f07244567","gas":"0x76c0","gasPrice":"0x9184e72a000","value":"0x9184e72a","data":"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675","condition":{"block":354221,"time":"2018-10-05T16:45:01.161Z"}}],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 Response
@@ -1658,6 +1628,36 @@ Response
   "id": 1,
   "jsonrpc": "2.0",
   "result": "homestead"
+}
+```
+
+***
+
+### parity_chainId
+
+Returns the current chain ID used for tranaction signing.
+
+#### Parameters
+
+None
+
+#### Returns
+
+- `Quantity` - The current blockchain chain ID
+
+#### Example
+
+Request
+```bash
+curl --data '{"method":"parity_chainId","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+Response
+```js
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": "0x1"
 }
 ```
 
