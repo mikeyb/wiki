@@ -6,6 +6,7 @@ title: The `private` Module
 
 - [private_call](#private_call)
 - [private_composeDeploymentTransaction](#private_composedeploymenttransaction)
+- [private_contractkey](#private_contractkey)
 - [private_sendTransaction](#private_sendtransaction)
 
 ## JSON-RPC API Reference
@@ -113,6 +114,40 @@ Response
       "value": "0x0"
     }
   }
+}
+```
+
+***
+
+### private_contractkey
+
+ Returns the Secret Store Document key id associated with the deployed public contract.
+
+#### Parameters
+
+0. `Address` - 20 Bytes - Address of the private contract
+
+```js
+params: ["0x4466399893d182dcbe43c2a5a79db93b52ed26ae"]
+```
+
+#### Returns
+
+- `Data` - 20 Bytes - Document key id associated with the deployed public contract.
+
+#### Example
+
+Request
+```bash
+curl --data '{"method":"private_contractkey","params":["0x4466399893d182dcbe43c2a5a79db93b52ed26ae"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+Response
+```js
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": "0x0000000000000000000000004466399893d182dcbe43c2a5a79db93b52ed26ae"
 }
 ```
 
