@@ -256,7 +256,7 @@ Sets the network spec file Parity is using.
 
 #### Parameters
 
-0. `String` - Chain spec name, one of: "foundation", "ropsten", "morden", "kovan", "olympic", "classic", "dev", "expanse", "musicoin" or a filename.
+0. `String` - Chain spec name, one of: "foundation", "ropsten", "morden", "kovan", "classic", "dev", "expanse", "musicoin" or a filename.
 
 ```js
 params: ["foundation"]
