@@ -740,27 +740,26 @@ params: [
 
 #### Returns
 
-- `Object` - A block object, or `null` when no block was found.
-    - `number`: `Quantity` - The block number. `null` when its pending block
-    - `hash`: `Hash` - 32 Bytes - hash of the block. `null` when its pending block
-    - `parentHash`: `Hash` - 32 Bytes - hash of the parent block
-    - `nonce`: `Data` - 8 Bytes - hash of the generated proof-of-work. `null` when its pending block
-    - `sha3Uncles`: `Data` - 32 Bytes - SHA3 of the uncles data in the block
-    - `logsBloom`: `Data` - 256 Bytes - the bloom filter for the logs of the block. `null` when its pending block
-    - `transactionsRoot`: `Data` - 32 Bytes - the root of the transaction trie of the block
-    - `stateRoot`: `Data` - 32 Bytes - the root of the final state trie of the block
-    - `receiptsRoot`: `Data` - 32 Bytes - the root of the receipts trie of the block
-    - `author`: `Address` - 20 Bytes - the address of the author of the block (the beneficiary to whom the mining rewards were given)
-    - `miner`: `Address` - 20 Bytes - alias of 'author'
-    - `difficulty`: `Quantity` - integer of the difficulty for this block
-    - `totalDifficulty`: `Quantity` - integer of the total difficulty of the chain until this block
-    - `extraData`: `Data` - the 'extra data' field of this block
-    - `size`: `Quantity` - integer the size of this block in bytes
-    - `gasLimit`: `Quantity` - the maximum gas allowed in this block
-    - `gasUsed`: `Quantity` - the total used gas by all transactions in this block
-    - `timestamp`: `Quantity` - the unix timestamp for when the block was collated
-    - `transactions`: `Array` - Array of transaction objects, or 32 Bytes transaction hashes depending on the last given parameter
-    - `uncles`: `Array` - Array of uncle hashes
+- `Object` - A transaction object, or `null` when no transaction was found:
+    - `hash`: `Hash` - 32 Bytes - hash of the transaction.
+    - `nonce`: `Quantity` - the number of transactions made by the sender prior to this one.
+    - `blockHash`: `Hash` - 32 Bytes - hash of the block where this transaction was in. `null` when its pending.
+    - `blockNumber`: `Quantity` or `Tag` - block number where this transaction was in. `null` when its pending.
+    - `transactionIndex`: `Quantity` - integer of the transactions index position in the block. `null` when its pending.
+    - `from`: `Address` - 20 Bytes - address of the sender.
+    - `to`: `Address` - 20 Bytes - address of the receiver. `null` when its a contract creation transaction.
+    - `value`: `Quantity` - value transferred in Wei.
+    - `gasPrice`: `Quantity` - gas price provided by the sender in Wei.
+    - `gas`: `Quantity` - gas provided by the sender.
+    - `input`: `Data` - the data send along with the transaction.
+    - `v`: `Quantity` - the standardised V field of the signature.
+    - `standard_v`: `Quantity` - the standardised V field of the signature (0 or 1).
+    - `r`: `Quantity` - the R field of the signature.
+    - `raw`: `Data` - raw transaction data
+    - `publicKey`: `Hash` - public key of the signer.
+    - `chainId`: `Quantity` - the chain id of the transaction, if any.
+    - `creates`: `Hash` - creates contract hash
+    - `condition`: `Object` - (optional) conditional submission, Block number in `block` or timestamp in `time` or `null`. (parity-feature)
 
 #### Example
 
@@ -775,31 +774,17 @@ Response
   "id": 1,
   "jsonrpc": "2.0",
   "result": {
-    "number": "0x1b4", // 436
-    "hash": "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-    "parentHash": "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
-    "sealFields": [
-      "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
-      "0x0000000000000042"
-    ],
-    "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-    "logsBloom": "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-    "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-    "stateRoot": "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
-    "miner": "0x4e65fda2159562a496f9f3522f89122a3088497a",
-    "difficulty": "0x27f07", // 163591
-    "totalDifficulty": "0x27f07", // 163591
-    "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "size": "0x27f07", // 163591
-    "gasLimit": "0x9f759", // 653145
-    "minGasPrice": "0x9f759", // 653145
-    "gasUsed": "0x9f759", // 653145
-    "timestamp": "0x54e34e8e", // 1424182926
-    "transactions": [{ ... }, { ... }, ...],
-    "uncles": [
-      "0x1606e5...",
-      "0xd5145a9..."
-    ]
+    "hash": "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+    "nonce": "0x0", // 0
+    "blockHash": "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+    "blockNumber": "0x15df", // 5599
+    "transactionIndex": "0x1", // 1
+    "from": "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+    "to": "0x853f43d8a49eeb85d32cf465507dd71d507100c1",
+    "value": "0x7f110", // 520464
+    "gas": "0x7f110", // 520464
+    "gasPrice": "0x09184e72a000",
+    "input": "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360"
   }
 }
 ```
