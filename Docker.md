@@ -100,17 +100,17 @@ $ touch ~/.local/share/io.parity.ethereum/docker/config.toml
 You can use the [Config File Generator](https://paritytech.github.io/parity-config-generator/) to configure your Parity Ethereum node and save it on your host's disk, i.e., at `~/.local/share/io.parity.ethereum/docker/config.toml`. To mount the configuration, use the `docker run -v` option:
 
 ```bash
-$ docker run -ti -v ~/.local/share/io.parity.ethereum/docker/:/root/.local/share/io.parity.ethereum/ parity/parity:v1.7.0 --config /root/.local/share/io.parity.ethereum/config.toml
+$ docker run -ti -v ~/.local/share/io.parity.ethereum/docker/:/home/parity/.local/share/io.parity.ethereum/ parity/parity:v1.7.0 --config /home/parity/.local/share/io.parity.ethereum/config.toml
 ```
 
-This will mount `~/.local/share/io.parity.ethereum/docker/` of the host machine at `/root/.local/share/io.parity.ethereum/` inside the docker container. Therefore, the config file will be available via `--config /root/.local/share/io.parity.ethereum/config.toml`.
+This will mount `~/.local/share/io.parity.ethereum/docker/` of the host machine at `/home/parity/.local/share/io.parity.ethereum/` inside the docker container. Therefore, the config file will be available via `--config /home/parity/.local/share/io.parity.ethereum/config.toml`.
 
 ##### Persistent data directory
 
 In case you need to persist the blockchain files, keys etc., you should run the image with the `--base-path` option and then mount it, e.g.:
 
 ```
-$ docker run -ti -v ~/.local/share/io.parity.ethereum/docker/:/root/.local/share/io.parity.ethereum/ parity/parity:v1.7.0 --base-path /root/.local/share/io.parity.ethereum/
+$ docker run -ti -v ~/.local/share/io.parity.ethereum/docker/:/home/parity/.local/share/io.parity.ethereum/ parity/parity:v1.7.0 --base-path /home/parity/.local/share/io.parity.ethereum/
 ```
 
 This will expose the whole data dir to the host machine at `~/.local/share/io.parity.ethereum/docker/`.
